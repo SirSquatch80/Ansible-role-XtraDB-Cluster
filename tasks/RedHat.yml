@@ -100,4 +100,9 @@
   loop_control:
     loop_var: fwport
 
+- name: Uncomment default time zone on db nodes
+  lineinfile:
+    dest: /etc/percona-xtradb-cluster.conf.d/wsrep.cnf
+    search_string: '#default_time_zone=+00:00'
+    line: 'default_time_zone=+00:00'
 ...
