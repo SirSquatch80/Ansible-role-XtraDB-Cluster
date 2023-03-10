@@ -1,0 +1,15 @@
+- hosts: db
+  gather_facts: true
+  become: true
+  roles:
+    - role: ansible-role-XtraDB-Cluster
+      xtradb_cluster_name: "morpheus"
+      xtradb_root_password: "P@ssword!"
+      xtradb_sst_user: sstuser
+      xtradb_sst_password: "P@ssword!"
+      xtradb_nodes_group: "db"
+      xtradb_bind_interface: eth0
+      xtradb_configure_firewalld: true      
+      xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
+      xtradb_wsrep_cluster_address: "gcomm://{{ groups['db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+      xtradb_master_node: "{{ hostvars[ groups['db'][0] ].ansible_default_ipv4.address }}"
